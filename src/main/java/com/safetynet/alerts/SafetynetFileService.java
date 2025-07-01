@@ -1,5 +1,6 @@
 package com.safetynet.alerts;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -26,11 +27,14 @@ public class SafetynetFileService {
             //ObjectMapper objectMapper =new ObjectMapper();
             InputStream inputStream = new ClassPathResource("data.json").getInputStream();
 
+            // Parse the full JSON
+            JsonNode rootNode = objectMapper.readTree(inputStream);
 
-            //As JSON file is starting with { had to user Wrapper function and call .class
-            SafetynerFireStationWrapper fireStationWrapper = objectMapper.readValue(inputStream,SafetynerFireStationWrapper.class);
-
-             fireStation = fireStationWrapper.getFirestation();
+            JsonNode fireStationNode = rootNode.get("firestations");
+            // Deserialize that into a List<SafetynetFireStation>
+            fireStation = objectMapper.convertValue(
+                    fireStationNode,
+                    new TypeReference<List<SafetynetFireStation>>() {});
 
             //System.out.println(fireStation);
             return fireStation ;
