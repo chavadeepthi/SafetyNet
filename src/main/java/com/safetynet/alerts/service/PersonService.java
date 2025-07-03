@@ -2,46 +2,33 @@ package com.safetynet.alerts.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PersonService {
 
-    private final ObjectMapper objectMapper;
+
+    private final JsonFileReadService jsonFileReadService;
     private List<Person> personList;
 
     @Autowired //Optional for single constructor
-    public PersonService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public PersonService(JsonFileReadService jsonFileReadService) {
+        this.jsonFileReadService = jsonFileReadService;
     }
 
     public List<Person> processJSONPerson() {
-        try {
-
-            InputStream inputStream = new ClassPathResource("data.json").getInputStream();
-            JsonNode rootNode = objectMapper.readTree(inputStream);
-
-            JsonNode personNode = rootNode.get("persons");
-            personList = objectMapper.convertValue(personNode,
-                    new TypeReference<List<Person>>() {
-                    });
-
-            return personList;
-
-        } catch (IOException e) {
-            System.err.println("Error reading the JSON file: " + e.getMessage());
-            e.printStackTrace();
+        if (personList == null) { // only load once
+            JsonNode personNode = jsonFileReadService.getRootNode().path("persons");
+            personList = jsonFileReadService.getObjectMapper().convertValue(
+                    personNode,
+                    new TypeReference<List<Person>>() {}
+            );
         }
-        return null;
+        return personList;
     }
 
     public List<String> processAllEmail(String city) {

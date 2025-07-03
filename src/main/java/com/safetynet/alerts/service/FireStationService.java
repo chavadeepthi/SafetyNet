@@ -1,51 +1,31 @@
 package com.safetynet.alerts.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.model.FireStation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class FireStationService {
 
-    private final ObjectMapper objectMapper;
+    private final JsonFileReadService jsonFileReadService;
     private List<FireStation> fireStation;
 
-    @Autowired
-    public FireStationService(ObjectMapper objectMapper){
-        this.objectMapper = objectMapper;
+
+   public FireStationService(JsonFileReadService jsonFileReadService){
+        this.jsonFileReadService = jsonFileReadService;
     }
 
-    public List<FireStation> processJSONFireStation(){
-        try {
-            //ObjectMapper objectMapper =new ObjectMapper();
-            InputStream inputStream = new ClassPathResource("data.json").getInputStream();
-
-            // Parse the full JSON
-            JsonNode rootNode = objectMapper.readTree(inputStream);
-
-            JsonNode fireStationNode = rootNode.get("firestations");
-            // Deserialize that into a List<SafetynetFireStation>
-            fireStation = objectMapper.convertValue(
+    public List<FireStation> processJSONFireStation() {
+        if (fireStation == null) { // only load once
+            JsonNode fireStationNode = jsonFileReadService.getRootNode().path("firestations");
+            fireStation = jsonFileReadService.getObjectMapper().convertValue(
                     fireStationNode,
-                    new TypeReference<List<FireStation>>() {});
-
-            //System.out.println(fireStation);
-            return fireStation ;
-
-        }catch (IOException e) {
-            System.err.println("Error reading the JSON file: " + e.getMessage());
-            e.printStackTrace();
+                    new TypeReference<List<FireStation>>() {}
+            );
         }
-        return null;
-
+        return fireStation;
     }
 
     public List<FireStation> findByStationNumber (String StationNumber)
