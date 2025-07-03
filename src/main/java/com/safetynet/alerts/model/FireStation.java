@@ -1,6 +1,6 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.model;
 
-public class SafetynetFireStation {
+public class FireStation {
     private String address;
     private String station;
 

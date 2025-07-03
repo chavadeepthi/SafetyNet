@@ -1,20 +1,22 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.controller;
+import com.safetynet.alerts.service.PersonService;
+import com.safetynet.alerts.model.Person;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-public class SafetyNetPersonController {
+public class PersonController {
 
-    private final SafetynetPersonService personList;
+    private final PersonService personList;
 
-    public SafetyNetPersonController(SafetynetPersonService personList){
+    public PersonController(PersonService personList){
         this.personList = personList;
     }
 
     @GetMapping("/personList")
-    public List<SafetynetPerson> getPersonList(){
+    public List<Person> getPersonList(){
         return personList.processJSONPerson();
     }
 
