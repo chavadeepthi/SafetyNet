@@ -17,7 +17,7 @@ public class PersonController {
 
     @GetMapping("/personList")
     public List<Person> getPersonList(){
-        return personList.processJSONPerson();
+        return personList.getAllPerson();
     }
 
     @GetMapping("/communityEmail")

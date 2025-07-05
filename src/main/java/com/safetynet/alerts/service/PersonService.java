@@ -3,6 +3,7 @@ package com.safetynet.alerts.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -12,41 +13,23 @@ import java.util.List;
 public class PersonService {
 
 
-    private final JsonFileReadService jsonFileReadService;
+    //private final JsonFileReadService jsonFileReadService;
     private List<Person> personList;
+    PersonRepository personRepository;
+
 
     @Autowired //Optional for single constructor
-    public PersonService(JsonFileReadService jsonFileReadService) {
-        this.jsonFileReadService = jsonFileReadService;
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
-    public List<Person> processJSONPerson() {
-        if (personList == null) { // only load once
-            JsonNode personNode = jsonFileReadService.getRootNode().path("persons");
-            personList = jsonFileReadService.getObjectMapper().convertValue(
-                    personNode,
-                    new TypeReference<List<Person>>() {}
-            );
-        }
-        return personList;
+    public List<Person> getAllPerson() {
+        return personRepository.processJSONPerson();
     }
 
     public List<String> processAllEmail(String city) {
 
-        if (personList == null) {
-            processJSONPerson();
-        }
-        List<String> emails = new ArrayList<>();
-        for (Person person : personList) {
-            if (person.getCity() != null && person.getCity().equalsIgnoreCase(city)) {
-                String email = person.getEmail();
-                if (email != null && !email.trim().isEmpty() && !emails.contains(email)) {
-                    emails.add(email);
-                }
-            }
-        }
-
-        return emails;
+     return personRepository.processAllEmail(city);
     }
 
 }

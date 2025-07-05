@@ -21,7 +21,7 @@ public class FireStationController {
 
     @GetMapping("/firestationList")
     public List<FireStation> getFireStation(){
-        return fileService.processJSONFireStation();
+        return fileService.getAllFireStation();
     }
 
     @GetMapping("/firestation")
