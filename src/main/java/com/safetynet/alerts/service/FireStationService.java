@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class FireStationService {
 
-   private List<FireStation> fireStation;
+   //private List<FireStation> fireStation;
     private FireStationRepository fireStationRepository;
 
     public FireStationService(FireStationRepository fireStationRepository) {
@@ -28,7 +28,19 @@ public class FireStationService {
         return fireStationRepository.findByStationId(StationNumber);
 
 
+    }
+    public List<FireStation> addOrUpdateFireStation(FireStation fireStationObject){
+        List<FireStation> fireStation = fireStationRepository.processJSONFireStation();
+        FireStation existingItem = fireStationRepository.findByStationAddress(fireStationObject.getAddress());
+        if(existingItem == null){
 
+            fireStation.add(fireStationObject);
+        }
+        else{
+            existingItem.setAddress(fireStationObject.getAddress());
+            existingItem.setStation(fireStationObject.getStation());
+        }
+        return fireStation;
     }
 
 }

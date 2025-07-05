@@ -10,6 +10,7 @@ public class Person {
     public String city;
     public String phone;
     public String email;
+    public String zip;
 
 
     public void setFirstName(String firstname) {
@@ -32,6 +33,9 @@ public class Person {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
 
     public String getPhone() {
         return phone;
@@ -50,6 +54,9 @@ public class Person {
     }
     public String getCity() {
         return city;
+    }
+    public String getZip() {
+        return zip;
     }
 
 }

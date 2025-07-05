@@ -43,12 +43,38 @@ public class FireStationRepository {
             processJSONFireStation();
         }
         for (FireStation firestationId : fireStations) {
-            if (firestationId.getStation().trim().equalsIgnoreCase(StationNumber.trim())) {
+            if (firestationId.getAddress().trim().equalsIgnoreCase(StationNumber.trim())) {
                 matchingStation.add(firestationId);
             }
         }
         return matchingStation;
 
     }
+    public FireStation findByStationAddress (String StationAddress)
+    {
+
+        if (fireStations == null) {
+            processJSONFireStation();
+        }
+        for (FireStation firestationId : fireStations) {
+            if (firestationId.getStation().trim().equalsIgnoreCase(StationAddress.trim())) {
+                return firestationId;
+            }
+        }
+        return null;
+
+    }
+//    public List<FireStation> addOrUpdateFireStation(FireStation fireStationOject){
+//
+//            FireStation existingItem = findByStationAddress(fireStationOject.getAddress());
+//            if(existingItem == null){
+//                fireStations.add(fireStationOject);
+//            }
+//            else{
+//                existingItem.setAddress(fireStationOject.getAddress());
+//                existingItem.setStation(fireStationOject.getStation());
+//            }
+//            return fireStations;
+//    }
 
 }
