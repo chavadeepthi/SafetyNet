@@ -18,7 +18,7 @@ public class PersonController {
         this.personList = personList;
     }
 
-    @GetMapping("/personList")
+    @GetMapping("/persons")
     public List<Person> getPersonList(){
         return personList.getAllPerson();
     }
@@ -27,10 +27,12 @@ public class PersonController {
     public List<String> getEmailList(String city){
         return personList.processAllEmail(city);
     }
-    @PostMapping("/addperson")
+    @PostMapping("/person")
     public List<Person> addOrUpdateFireStation(@RequestBody Person personObject) {
         return personList.addOrUpdatePerson(personObject);
     }
+
+    //Put and Delete (First and Last Name)
 
 }
 

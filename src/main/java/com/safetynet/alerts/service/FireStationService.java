@@ -29,7 +29,7 @@ public class FireStationService {
 
 
     }
-    public List<FireStation> addOrUpdateFireStation(FireStation fireStationObject){
+    public List<FireStation> addNewFireStation(FireStation fireStationObject){
         List<FireStation> fireStation = fireStationRepository.processJSONFireStation();
         FireStation existingItem = fireStationRepository.findByStationAddress(fireStationObject.getAddress());
         if(existingItem == null){
@@ -43,4 +43,16 @@ public class FireStationService {
         return fireStation;
     }
 
+    public List<FireStation> updateFireStation(FireStation updatedStation, String address)
+    {
+        List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
+        for (FireStation fs : fireStationList) {
+            if (fs.getAddress().equalsIgnoreCase(address)) {
+                fs.setStation(updatedStation.getStation());
+                fs.setAddress(updatedStation.getAddress());
+
+            }
+        }
+        return fireStationList;
+    }
 }
