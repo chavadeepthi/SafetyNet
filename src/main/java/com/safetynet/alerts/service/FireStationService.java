@@ -5,6 +5,7 @@ import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.repository.FireStationRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -53,6 +54,23 @@ public class FireStationService {
 
             }
         }
+        return fireStationList;
+    }
+    public List<FireStation> deleteByAddress(String address) {
+        List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
+        Iterator<FireStation> iterator = fireStationList.iterator();
+        boolean removed = false;
+
+        while (iterator.hasNext()) {
+            FireStation fs = iterator.next();
+            if (fs.getAddress().equalsIgnoreCase(address)) {
+                iterator.remove();
+                removed = true;
+                break;
+            }
+        }
+
+        // Optionally persist the updated list here if needed
         return fireStationList;
     }
 }

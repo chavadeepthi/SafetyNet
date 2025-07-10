@@ -47,4 +47,9 @@ public class FireStationController {
         return fireStationService.updateFireStation(updatedStation, address);
     }
     // Delete with Station Number(grouping) and Address
+    @DeleteMapping("/firestation/{address}")
+    public List<FireStation> deleteFireStation(@PathVariable String address) {
+        return fireStationService.deleteByAddress(address);
+
+    }
 }
