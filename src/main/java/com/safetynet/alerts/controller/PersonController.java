@@ -2,16 +2,18 @@ package com.safetynet.alerts.controller;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.service.PersonService;
 import com.safetynet.alerts.model.Person;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Slf4j
 public class PersonController {
 
+    private static final Logger log = LoggerFactory.getLogger(PersonController.class);
     private final PersonService personList;
 
     public PersonController(PersonService personList){
@@ -24,15 +26,24 @@ public class PersonController {
     }
 
     @GetMapping("/communityEmail")
-    public List<String> getEmailList(String city){
+    public List<String> getEmailList(String city)
+    {
         return personList.processAllEmail(city);
     }
     @PostMapping("/person")
-    public List<Person> addOrUpdateFireStation(@RequestBody Person personObject) {
-        return personList.addOrUpdatePerson(personObject);
+    public List<Person> addPerson(@RequestBody Person personObject) {
+        return personList.addPerson(personObject);
     }
 
-    //Put and Delete (First and Last Name)
+    //Put
+    @PutMapping("/person/{firstname}")
+    public List<Person> updatePerson( @PathVariable String firstname, @RequestBody Person updatePerson)
+    {
+        log.info("Updating Person Details");
+        return personList.updatePerson(updatePerson, firstname);
+    }
+    //
+    // and Delete (First and Last Name)
 
 }
 

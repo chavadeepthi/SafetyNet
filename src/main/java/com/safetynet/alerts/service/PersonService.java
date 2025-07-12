@@ -5,35 +5,47 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.PersonRepository;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.logging.log4j.util.StringBuilders.equalsIgnoreCase;
+
 @Service
+@Slf4j
 public class PersonService {
 
 
+    private static final Logger log = LoggerFactory.getLogger(PersonService.class);
     //private final JsonFileReadService jsonFileReadService;
     //private List<Person> personList;
     PersonRepository personRepository;
+    private List<Person> personList = new ArrayList<>();
 
 
     @Autowired //Optional for single constructor
     public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
-
+    @PostConstruct
+    public void init() {
+        personList = personRepository.processJSONPerson();
+    }
     public List<Person> getAllPerson() {
-        return personRepository.processJSONPerson();
+        return personList;
     }
 
     public List<String> processAllEmail(String city) {
 
      return personRepository.processAllEmail(city);
     }
-    public List<Person> addOrUpdatePerson(Person personObject) {
-        List<Person> personList = getAllPerson();
+    public List<Person> addPerson(Person personObject) {
+        //List<Person> personList = getAllPerson();
         Person existingPerson = personRepository.findByFullName(personObject.getFirstName(), personObject.getLastName());
 
         if (existingPerson == null) {
@@ -46,6 +58,34 @@ public class PersonService {
             existingPerson.setEmail(personObject.getEmail());
         }
 
+        return personList;
+    }
+
+
+
+    public List<Person> updatePerson(Person updatePerson, String firstName)
+    {
+        //List<Person> personList = getAllPerson();
+        log.info("Person List", personList);
+        log.info("Person object", firstName);
+        //Person existingPerson = personRepository.findByFullName(updatePerson.getFirstName(), updatePerson.getLastName());
+
+        for(Person pd : personList){
+            log.info("Checking person: {}", pd.getFirstName());  //
+            if (pd.getFirstName().equalsIgnoreCase(firstName)) {
+                log.info("Match found. Updating person: {}", pd);
+                pd.setAddress(updatePerson.getAddress());
+                pd.setCity(updatePerson.getCity());
+                pd.setEmail(updatePerson.getEmail());
+                pd.setPhone(updatePerson.getPhone());
+                pd.setLastName(updatePerson.getLastName());
+                pd.setZip(updatePerson.getZip());
+                pd.setFirstName(updatePerson.getFirstName());
+
+
+            }
+
+        }
         return personList;
     }
 

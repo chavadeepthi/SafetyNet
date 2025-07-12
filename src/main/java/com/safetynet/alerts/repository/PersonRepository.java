@@ -46,6 +46,7 @@ public class PersonRepository {
         return emails;
     }
     public Person findByFullName(String firstName, String lastName) {
+
         for (Person person : processJSONPerson()) {
             if (person.getFirstName().equalsIgnoreCase(firstName.trim()) &&
                     person.getLastName().equalsIgnoreCase(lastName.trim())) {
