@@ -48,17 +48,7 @@ public class PersonService {
     public List<Person> addPerson(Person personObject) {
         //List<Person> personList = getAllPerson();
         //Person existingPerson = personRepository.findByFullName(personObject.getFirstName(), personObject.getLastName());
-        Person existingPerson = findByFullName(personObject.getFirstName(), personObject.getLastName());
-        if (existingPerson == null) {
-            getAllPerson().add(personObject);
-        } else {
-            existingPerson.setAddress(personObject.getAddress());
-            existingPerson.setCity(personObject.getCity());
-            existingPerson.setZip(personObject.getZip());
-            existingPerson.setPhone(personObject.getPhone());
-            existingPerson.setEmail(personObject.getEmail());
-        }
-
+        personList.add(personObject);
         return personList;
     }
     private Person findByFullName(String firstName, String lastName) {
@@ -71,14 +61,14 @@ public class PersonService {
         return null;
     }
 
-    public List<Person> deleteByFirstname(String firstname) {
+    public List<Person> deleteByFirstname(String firstname, String lastname) {
 
         Iterator<Person> iterator = personList.iterator();
         boolean removed = false;
 
         while (iterator.hasNext()) {
             Person fs = iterator.next();
-            if (fs.getFirstName().equalsIgnoreCase(firstname)) {
+            if (fs.getFirstName().equalsIgnoreCase(firstname) && fs.getLastName().equalsIgnoreCase(lastname)) {
                 iterator.remove();
                 removed = true;
                 break;
@@ -89,23 +79,23 @@ public class PersonService {
         return personList;
     }
 
-    public List<Person> updatePerson(Person updatePerson, String firstName)
+    public List<Person> updatePerson(Person updatePerson, String firstName, String lastName)
     {
         log.info("Person List: {}", personList);
         log.info("First name received: {}", firstName);
+        log.info("First name received: {}", lastName);
         //Person existingPerson = personRepository.findByFullName(updatePerson.getFirstName(), updatePerson.getLastName());
 
         for(Person pd : personList){
             log.info("Checking person: {}", pd.getFirstName());  //
-            if (pd.getFirstName().equalsIgnoreCase(firstName)) {
+            if (pd.getFirstName().equalsIgnoreCase(firstName) && pd.getLastName().equalsIgnoreCase(lastName)) {
                 log.info("Match found. Updating person: {}", pd);
                 pd.setAddress(updatePerson.getAddress());
                 pd.setCity(updatePerson.getCity());
                 pd.setEmail(updatePerson.getEmail());
                 pd.setPhone(updatePerson.getPhone());
-                pd.setLastName(updatePerson.getLastName());
                 pd.setZip(updatePerson.getZip());
-                pd.setFirstName(updatePerson.getFirstName());
+
 
 
             }

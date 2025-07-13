@@ -38,16 +38,7 @@ public class FireStationService {
 
     }
     public List<FireStation> addNewFireStation(FireStation fireStationObject){
-        //List<FireStation> fireStation = fireStationRepository.processJSONFireStation();
-        FireStation existingItem = fireStationRepository.findByStationAddress(fireStationObject.getAddress());
-        if(existingItem == null){
-
-            fireStationList.add(fireStationObject);
-        }
-        else{
-            existingItem.setAddress(fireStationObject.getAddress());
-            existingItem.setStation(fireStationObject.getStation());
-        }
+        fireStationList.add(fireStationObject);
         return fireStationList;
     }
 

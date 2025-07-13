@@ -91,7 +91,7 @@ class PersonServiceTest {
         when(personRepositoryMock.processJSONPerson()).thenReturn(testList);
         personServiceMock.init();
         // Act
-        List<Person> result = personServiceMock.updatePerson(updated, "Cutie");
+        List<Person> result = personServiceMock.updatePerson(updated, "Cutie", "Doe");
 
         // Assert
         assertEquals("456 New St", result.get(0).getAddress());

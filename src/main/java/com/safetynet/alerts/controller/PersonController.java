@@ -36,19 +36,19 @@ public class PersonController {
     }
 
     //Put
-    @PutMapping("/person/{firstname}")
-    public List<Person> updatePerson( @PathVariable String firstname, @RequestBody Person updatePerson)
+    @PutMapping("/person/{firstName}/{lastName}")
+    public List<Person> updatePerson( @PathVariable String firstName, @PathVariable String lastName, @RequestBody Person updatePerson)
     {
         log.info("Updating Person Details");
-        return personList.updatePerson(updatePerson, firstname);
+        return personList.updatePerson(updatePerson, firstName, lastName);
     }
     //
     // and Delete (First Name)
     // Delete with Station Number(grouping) and Address
-    @DeleteMapping("/person/{firstname}")
-    public List<Person> deletePerson(@PathVariable String firstname) {
-        log.info("Deleting Person with first name ", firstname);
-        return personList.deleteByFirstname(firstname);
+    @DeleteMapping("/person/{firstname}/{lastName}")
+    public List<Person> deletePerson(@PathVariable String firstname, @PathVariable String lastName) {
+        log.info("Deleting Person with first name ", firstname, lastName);
+        return personList.deleteByFirstname(firstname, lastName);
 
     }
 
