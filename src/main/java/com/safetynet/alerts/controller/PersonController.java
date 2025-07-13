@@ -43,7 +43,14 @@ public class PersonController {
         return personList.updatePerson(updatePerson, firstname);
     }
     //
-    // and Delete (First and Last Name)
+    // and Delete (First Name)
+    // Delete with Station Number(grouping) and Address
+    @DeleteMapping("/person/{firstname}")
+    public List<Person> deletePerson(@PathVariable String firstname) {
+        log.info("Deleting Person with first name ", firstname);
+        return personList.deleteByFirstname(firstname);
+
+    }
 
 }
 

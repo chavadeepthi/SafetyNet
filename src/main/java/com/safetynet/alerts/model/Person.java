@@ -12,6 +12,17 @@ public class Person {
     public String email;
     public String zip;
 
+    public Person(String firstName, String lastName, String address, String city,
+                  String zip, String phone,  String email) {
+        this.address = address;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email=email;
+        this.city = city;
+        this.phone = phone;
+        this.zip = zip;
+    }
+
 
     public void setFirstName(String firstname) {
         this.firstName = firstname;

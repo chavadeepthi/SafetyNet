@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.apache.logging.log4j.util.StringBuilders.equalsIgnoreCase;
@@ -46,8 +47,8 @@ public class PersonService {
     }
     public List<Person> addPerson(Person personObject) {
         //List<Person> personList = getAllPerson();
-        Person existingPerson = personRepository.findByFullName(personObject.getFirstName(), personObject.getLastName());
-
+        //Person existingPerson = personRepository.findByFullName(personObject.getFirstName(), personObject.getLastName());
+        Person existingPerson = findByFullName(personObject.getFirstName(), personObject.getLastName());
         if (existingPerson == null) {
             getAllPerson().add(personObject);
         } else {
@@ -60,14 +61,38 @@ public class PersonService {
 
         return personList;
     }
+    private Person findByFullName(String firstName, String lastName) {
+        for (Person p : personList) {
+            if (p.getFirstName().equalsIgnoreCase(firstName) &&
+                    p.getLastName().equalsIgnoreCase(lastName)) {
+                return p;
+            }
+        }
+        return null;
+    }
 
+    public List<Person> deleteByFirstname(String firstname) {
 
+        Iterator<Person> iterator = personList.iterator();
+        boolean removed = false;
+
+        while (iterator.hasNext()) {
+            Person fs = iterator.next();
+            if (fs.getFirstName().equalsIgnoreCase(firstname)) {
+                iterator.remove();
+                removed = true;
+                break;
+            }
+        }
+
+        // Optionally persist the updated list here if needed
+        return personList;
+    }
 
     public List<Person> updatePerson(Person updatePerson, String firstName)
     {
-        //List<Person> personList = getAllPerson();
-        log.info("Person List", personList);
-        log.info("Person object", firstName);
+        log.info("Person List: {}", personList);
+        log.info("First name received: {}", firstName);
         //Person existingPerson = personRepository.findByFullName(updatePerson.getFirstName(), updatePerson.getLastName());
 
         for(Person pd : personList){

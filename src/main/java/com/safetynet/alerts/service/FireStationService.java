@@ -2,7 +2,9 @@ package com.safetynet.alerts.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.FireStationRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,15 +13,20 @@ import java.util.List;
 @Service
 public class FireStationService {
 
-   //private List<FireStation> fireStation;
+
     private FireStationRepository fireStationRepository;
+    private List<FireStation> fireStationList = new ArrayList<>();
 
     public FireStationService(FireStationRepository fireStationRepository) {
         this.fireStationRepository = fireStationRepository;
     }
+    @PostConstruct
+    public void init() {
+        fireStationList = fireStationRepository.processJSONFireStation();
+    }
 
     public List<FireStation> getAllFireStation() {
-        return fireStationRepository.processJSONFireStation();
+        return fireStationList;
 
     }
 
@@ -31,22 +38,22 @@ public class FireStationService {
 
     }
     public List<FireStation> addNewFireStation(FireStation fireStationObject){
-        List<FireStation> fireStation = fireStationRepository.processJSONFireStation();
+        //List<FireStation> fireStation = fireStationRepository.processJSONFireStation();
         FireStation existingItem = fireStationRepository.findByStationAddress(fireStationObject.getAddress());
         if(existingItem == null){
 
-            fireStation.add(fireStationObject);
+            fireStationList.add(fireStationObject);
         }
         else{
             existingItem.setAddress(fireStationObject.getAddress());
             existingItem.setStation(fireStationObject.getStation());
         }
-        return fireStation;
+        return fireStationList;
     }
 
     public List<FireStation> updateFireStation(FireStation updatedStation, String address)
     {
-        List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
+        //List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
         for (FireStation fs : fireStationList) {
             if (fs.getAddress().equalsIgnoreCase(address)) {
                 fs.setStation(updatedStation.getStation());
@@ -57,7 +64,7 @@ public class FireStationService {
         return fireStationList;
     }
     public List<FireStation> deleteByAddress(String address) {
-        List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
+
         Iterator<FireStation> iterator = fireStationList.iterator();
         boolean removed = false;
 

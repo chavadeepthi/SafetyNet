@@ -36,12 +36,13 @@ public class FireStationServiceTest {
         List<FireStation> mockItems = Arrays.asList(station1, station2);
 
         when(fireStationRepositoryMock.processJSONFireStation()).thenReturn(mockItems);
+        fireStationServiceMock.init();
 
         // Act
         List<FireStation> result = fireStationServiceMock.getAllFireStation();
 
         // Assert
-        Assertions.assertTrue(result.size() == 2);
+        Assertions.assertEquals(result.size(), 2);
     }
 
     @Test
@@ -55,6 +56,8 @@ public class FireStationServiceTest {
         List<FireStation> mockItems = List.of(fs1);
 
         when(fireStationRepositoryMock.findByStationId(stationNumber)).thenReturn(mockItems);
+        fireStationServiceMock.init();
+
         // When
         List<FireStation> result = fireStationServiceMock.findByStationNumber(stationNumber);
         // Assert
@@ -66,9 +69,8 @@ public class FireStationServiceTest {
         FireStation fireStationObject = new FireStation("123 Main St", "23");
         List<FireStation> existingStations = new ArrayList<>();
 
-        //when(fireStationRepositoryMock.processJSONFireStation()).thenReturn(existingStations);
-        //when(fireStationRepositoryMock.findByStationId("23")).thenReturn(null);
-
+        when(fireStationRepositoryMock.processJSONFireStation()).thenReturn(existingStations);
+        fireStationServiceMock.init();
         // When
         List<FireStation> result = fireStationServiceMock.addNewFireStation(fireStationObject);
        // Then
@@ -91,6 +93,7 @@ public class FireStationServiceTest {
         List<FireStation> expectedList = List.of(fs1, fs2);
 
         when(fireStationRepositoryMock.findByStationId(stationNumber)).thenReturn(expectedList);
+        fireStationServiceMock.init();
 
         // Act
         List<FireStation> result = fireStationServiceMock.findByStationNumber(stationNumber);
