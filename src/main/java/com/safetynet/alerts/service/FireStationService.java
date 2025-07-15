@@ -48,7 +48,7 @@ public class FireStationService {
         for (FireStation fs : fireStationList) {
             if (fs.getAddress().equalsIgnoreCase(address)) {
                 fs.setStation(updatedStation.getStation());
-                fs.setAddress(updatedStation.getAddress());
+                //fs.setAddress(updatedStation.getAddress());
 
             }
         }

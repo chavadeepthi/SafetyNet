@@ -4,8 +4,6 @@ package com.safetynet.alerts.controller;
 import com.safetynet.alerts.service.FireStationService;
 import com.safetynet.alerts.model.FireStation;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class FireStationController {
     public List<FireStation> getFireStations(){
         log.info("Getting All Fire Stations");
         List<FireStation> fireStationsResults = fireStationService.getAllFireStation();
-        log.info("Found Fire Stations of Length"+fireStationsResults.size());
+        log.info("Found Fire Stations of Length "+fireStationsResults.size());
         return fireStationsResults;
     }
 
@@ -36,7 +34,7 @@ public class FireStationController {
         log.info("Searching for fire stations witn Station ID ", stationNumber);
         return fireStationService.findByStationNumber(stationNumber);
     }
-    @PostMapping("/firestationUpdate")
+    @PostMapping("/firestation")
     public List<FireStation> addNewFireStation(@RequestBody FireStation fireStationObject) {
         log.info("Adding new FireStation record ", fireStationObject);
         return fireStationService.addNewFireStation(fireStationObject);
