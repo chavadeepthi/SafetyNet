@@ -1,6 +1,4 @@
 package com.safetynet.alerts.controller;
-
-
 import com.safetynet.alerts.service.FireStationService;
 import com.safetynet.alerts.model.FireStation;
 import lombok.extern.slf4j.Slf4j;

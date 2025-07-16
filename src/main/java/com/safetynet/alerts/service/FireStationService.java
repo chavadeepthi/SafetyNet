@@ -1,8 +1,5 @@
 package com.safetynet.alerts.service;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.FireStationRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
