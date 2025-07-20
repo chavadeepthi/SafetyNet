@@ -5,6 +5,8 @@ import com.safetynet.alerts.service.MedicalRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,19 +37,31 @@ public class MedicalRecordController {
         return medicalRecordList.addMedicalRecords(newRecord);
     }
     @PutMapping("/medicalRecord/{firstName}/{lastName}")
-    public List<MedicalRecord> addMedicalRecords(@RequestBody MedicalRecord newRecord,
-                                                 @PathVariable String firstName,
-                                                 @PathVariable String lastName){
+    public ResponseEntity<String> updateMedicalRecords(@RequestBody MedicalRecord newRecord,
+                                            @PathVariable String firstName,
+                                            @PathVariable String lastName){
 
         log.info("Updating Medical record for ", firstName, lastName);
-        return medicalRecordList.updateMedicalRecords(newRecord, firstName, lastName);
+        boolean record_updated =  medicalRecordList.updateMedicalRecords(newRecord, firstName, lastName);
+        if(record_updated)
+        {
+            return ResponseEntity.ok("Medical Record Updation successfully.");
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(firstName + lastName + " not found: " );
+    }
     }
     @DeleteMapping("/medicalRecord/{firstName}/{lastName}")
-    public List<MedicalRecord> deleteMedicalRecords(
+    public ResponseEntity<String> deleteMedicalRecords(
                                                  @PathVariable String firstName,
                                                  @PathVariable String lastName){
 
         log.info("Deleting Medical record for ", firstName, lastName);
-        return medicalRecordList.deleteMedicalRecords( firstName, lastName);
+        boolean record_deleted =  medicalRecordList.deleteMedicalRecords( firstName, lastName);
+        if(record_deleted)
+        {
+            return ResponseEntity.ok("Medical Record Updation successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(firstName + lastName + " not found: " );
+        }
     }
 }

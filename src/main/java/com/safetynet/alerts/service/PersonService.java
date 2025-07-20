@@ -22,7 +22,7 @@ import static org.apache.logging.log4j.util.StringBuilders.equalsIgnoreCase;
 public class PersonService {
 
 
-    private static final Logger log = LoggerFactory.getLogger(PersonService.class);
+    //private static final Logger log = LoggerFactory.getLogger(PersonService.class);
     //private final JsonFileReadService jsonFileReadService;
     //private List<Person> personList;
     PersonRepository personRepository;
@@ -61,7 +61,7 @@ public class PersonService {
         return null;
     }
 
-    public List<Person> deleteByFirstname(String firstname, String lastname) {
+    public boolean deleteByFirstname(String firstname, String lastname) {
 
         Iterator<Person> iterator = personList.iterator();
         boolean removed = false;
@@ -76,14 +76,12 @@ public class PersonService {
         }
 
         // Optionally persist the updated list here if needed
-        return personList;
+        return removed;
     }
 
-    public List<Person> updatePerson(Person updatePerson, String firstName, String lastName)
+    public boolean updatePerson(Person updatePerson, String firstName, String lastName)
     {
-        log.info("Person List: {}", personList);
-        log.info("First name received: {}", firstName);
-        log.info("First name received: {}", lastName);
+        boolean updated = false;
         //Person existingPerson = personRepository.findByFullName(updatePerson.getFirstName(), updatePerson.getLastName());
 
         for(Person pd : personList){
@@ -96,12 +94,12 @@ public class PersonService {
                 pd.setPhone(updatePerson.getPhone());
                 pd.setZip(updatePerson.getZip());
 
-
+                updated = true;
 
             }
 
         }
-        return personList;
+        return updated;
     }
 
 }

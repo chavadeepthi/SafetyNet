@@ -39,19 +39,28 @@ public class FireStationService {
         return fireStationList;
     }
 
-    public List<FireStation> updateFireStation(FireStation updatedStation, String address)
+    /**
+     * Update FireStaiton will take Station Address as input and update Statiotn ID
+     *
+     * @param updatedStation Station RequestBody
+     * @param address Input Address to update Station ID
+     * @return return List of Firestaitons for Validation
+     */
+    public int updateFireStation(FireStation updatedStation, String address)
     {
+        int response = 0;
         //List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
         for (FireStation fs : fireStationList) {
             if (fs.getAddress().equalsIgnoreCase(address)) {
                 fs.setStation(updatedStation.getStation());
+                response = 1;
                 //fs.setAddress(updatedStation.getAddress());
 
             }
         }
-        return fireStationList;
+        return response;
     }
-    public List<FireStation> deleteByAddress(String address) {
+    public boolean deleteByAddress(String address) {
 
         Iterator<FireStation> iterator = fireStationList.iterator();
         boolean removed = false;
@@ -66,6 +75,6 @@ public class FireStationService {
         }
 
         // Optionally persist the updated list here if needed
-        return fireStationList;
+        return removed;
     }
 }

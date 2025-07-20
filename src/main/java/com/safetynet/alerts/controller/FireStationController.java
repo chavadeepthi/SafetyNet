@@ -2,6 +2,8 @@ package com.safetynet.alerts.controller;
 import com.safetynet.alerts.service.FireStationService;
 import com.safetynet.alerts.model.FireStation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +29,8 @@ public class FireStationController {
         return fireStationsResults;
     }
 
-    @GetMapping("/firestation")
-    public List<FireStation> getFirestationByNumber(@RequestParam String stationNumber) {
+    @GetMapping("/firestation/{stationNumber}")
+    public List<FireStation> getFirestationByNumber(@PathVariable String stationNumber) {
         log.info("Searching for fire stations witn Station ID ", stationNumber);
         return fireStationService.findByStationNumber(stationNumber);
     }
@@ -41,15 +43,26 @@ public class FireStationController {
     // Put Fire Stations address
 
     @PutMapping("/firestation/{address}")
-    public List<FireStation> UpdateFirestationByAddress( @PathVariable String address, @RequestBody FireStation updatedStation){
+    public ResponseEntity<String> UpdateFirestationByAddress( @PathVariable String address, @RequestBody FireStation updatedStation){
         log.info("Updating FireStation with Address ", address);
-        return fireStationService.updateFireStation(updatedStation, address);
+        int updated = fireStationService.updateFireStation(updatedStation, address);
+
+        if (updated == 1) {
+            return ResponseEntity.ok("FireStation updated successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found: " + address);
+        }
     }
     // Delete with Station Number(grouping) and Address
     @DeleteMapping("/firestation/{address}")
-    public List<FireStation> deleteFireStation(@PathVariable String address) {
+    public ResponseEntity<String> deleteFireStation(@PathVariable String address) {
         log.info("Deleting Firstation with Address ", address);
-        return fireStationService.deleteByAddress(address);
+        boolean response =  fireStationService.deleteByAddress(address);
+        if (response) {
+            return ResponseEntity.ok("FireStation Deletion successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found: " + address);
+        }
 
     }
 }

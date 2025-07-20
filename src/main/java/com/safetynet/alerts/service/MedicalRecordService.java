@@ -36,9 +36,10 @@ public class MedicalRecordService {
         return  medicalRecordList;
     }
 
-    public List<MedicalRecord> updateMedicalRecords(MedicalRecord newRecord,
+    public boolean updateMedicalRecords(MedicalRecord newRecord,
                                                     String firstName, String lastName)
     {
+        boolean record_deleted = false;
         for (MedicalRecord record : medicalRecordList){
             if (record.getFirstName().equalsIgnoreCase(firstName) &&
                     record.getLastName().equalsIgnoreCase(lastName)) {
@@ -46,22 +47,24 @@ public class MedicalRecordService {
                 record.setBirthdate(newRecord.getBirthdate());
                 record.setMedications(newRecord.getMedications());
                 record.setAllergies(newRecord.getAllergies());
+                record_deleted = true;
                 break;
             }
         }
-        return medicalRecordList;
+        return record_deleted;
     }
 
-    public List<MedicalRecord> deleteMedicalRecords(String firstName, String lastName) {
+    public boolean deleteMedicalRecords(String firstName, String lastName) {
         Iterator<MedicalRecord> iterator = medicalRecordList.iterator();
+        boolean record_deleted = false;
         while (iterator.hasNext()) {
             MedicalRecord record = iterator.next();
             if (record.getFirstName().equalsIgnoreCase(firstName)
                     && record.getLastName().equalsIgnoreCase(lastName)) {
-                iterator.remove(); // ✅ safely removes from list
-
+                iterator.remove();
+                record_deleted = true;
             }
         }
-        return medicalRecordList;
+        return record_deleted;
     }
 }

@@ -90,7 +90,8 @@ public class MedicalRecordsServiceTest {
         mockData.add(existing);
         when(medicalRecordRepositoryMock.processJSONMedicalRecord()).thenReturn(mockData);
         medicalRecordServiceMock.init();
-        List<MedicalRecord> result = medicalRecordServiceMock.updateMedicalRecords(newRec, "John", "Doe");
+         medicalRecordServiceMock.updateMedicalRecords(newRec, "John", "Doe");
+        List<MedicalRecord> result = medicalRecordServiceMock.getAllMedicalRecords();
         System.out.println(result);
 
         // Assert
@@ -117,7 +118,8 @@ public class MedicalRecordsServiceTest {
         mockData.add(rec2);
         when(medicalRecordRepositoryMock.processJSONMedicalRecord()).thenReturn(mockData);
         medicalRecordServiceMock.init();
-        List<MedicalRecord> result = medicalRecordServiceMock.deleteMedicalRecords("John", "Doe");
+        medicalRecordServiceMock.deleteMedicalRecords("John", "Doe");
+        List<MedicalRecord> result = medicalRecordServiceMock.getAllMedicalRecords();
         System.out.println(result);
 
         // Assert
