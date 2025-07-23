@@ -3,7 +3,6 @@ package com.safetynet.alerts.repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.service.JsonFileReadService;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -15,18 +14,18 @@ public class FireStationRepository {
     //List<FireStation> fireStations = new ArrayList<FireStation>();
 
 
-    private final JsonFileReadService jsonFileReadService;
+    private final JsonFileReadRespository jsonFileReadRespository;
     List<FireStation> fireStations;
 
 
-    public FireStationRepository(JsonFileReadService jsonFileReadService){
-        this.jsonFileReadService = jsonFileReadService;
+    public FireStationRepository(JsonFileReadRespository jsonFileReadRespository){
+        this.jsonFileReadRespository = jsonFileReadRespository;
     }
 
     public List<FireStation> processJSONFireStation() {
         if (fireStations == null) { // only load once
-            JsonNode fireStationNode = jsonFileReadService.getRootNode().path("firestations");
-            fireStations = jsonFileReadService.getObjectMapper().convertValue(
+            JsonNode fireStationNode = jsonFileReadRespository.getRootNode().path("firestations");
+            fireStations = jsonFileReadRespository.getObjectMapper().convertValue(
                     fireStationNode,
                     new TypeReference<List<FireStation>>() {}
             );
@@ -43,7 +42,7 @@ public class FireStationRepository {
             processJSONFireStation();
         }
         for (FireStation firestationId : fireStations) {
-            if (firestationId.getAddress().trim().equalsIgnoreCase(StationNumber.trim())) {
+            if (firestationId.getStation().trim().equalsIgnoreCase(StationNumber.trim())) {
                 matchingStation.add(firestationId);
             }
         }
@@ -57,24 +56,13 @@ public class FireStationRepository {
             processJSONFireStation();
         }
         for (FireStation firestationId : fireStations) {
-            if (firestationId.getStation().trim().equalsIgnoreCase(StationAddress.trim())) {
+            if (firestationId.getAddress().trim().equalsIgnoreCase(StationAddress.trim())) {
                 return firestationId;
             }
         }
         return null;
 
     }
-//    public List<FireStation> addOrUpdateFireStation(FireStation fireStationOject){
-//
-//            FireStation existingItem = findByStationAddress(fireStationOject.getAddress());
-//            if(existingItem == null){
-//                fireStations.add(fireStationOject);
-//            }
-//            else{
-//                existingItem.setAddress(fireStationOject.getAddress());
-//                existingItem.setStation(fireStationOject.getStation());
-//            }
-//            return fireStations;
-//    }
+
 
 }

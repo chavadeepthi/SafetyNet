@@ -1,5 +1,12 @@
 package com.safetynet.alerts.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FireStation {
     private String address;
     private String station;
@@ -20,10 +27,10 @@ public class FireStation {
         this.address = address;
     }
 
-    //
-    public FireStation(String address, String station) {
-        this.address = address;
-        this.station = station;
-    }
+
+//    public FireStation(String address, String station) {
+//        this.address = address;
+//        this.station = station;
+//    }
 
 }

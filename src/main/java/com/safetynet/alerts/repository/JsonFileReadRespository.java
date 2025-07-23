@@ -1,4 +1,4 @@
-package com.safetynet.alerts.service;
+package com.safetynet.alerts.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,13 +12,13 @@ import java.io.InputStream;
 
 @Slf4j
 @Service
-public class JsonFileReadService {
+public class JsonFileReadRespository {
 
     private final ObjectMapper objectMapper;
     private JsonNode rootNode;
 
     @Autowired
-    public JsonFileReadService(ObjectMapper objectMapper) {
+    public JsonFileReadRespository(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         JsonFileParse();
     }

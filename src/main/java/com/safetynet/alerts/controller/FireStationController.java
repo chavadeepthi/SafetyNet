@@ -45,9 +45,9 @@ public class FireStationController {
     @PutMapping("/firestation/{address}")
     public ResponseEntity<String> UpdateFirestationByAddress( @PathVariable String address, @RequestBody FireStation updatedStation){
         log.info("Updating FireStation with Address ", address);
-        int updated = fireStationService.updateFireStation(updatedStation, address);
+        boolean updated = fireStationService.updateFireStation(updatedStation, address);
 
-        if (updated == 1) {
+        if (updated) {
             return ResponseEntity.ok("FireStation updated successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found: " + address);

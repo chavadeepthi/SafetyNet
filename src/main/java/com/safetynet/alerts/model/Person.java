@@ -1,8 +1,10 @@
 package com.safetynet.alerts.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Person {
     public String firstName;
     public String lastName;

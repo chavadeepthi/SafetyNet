@@ -46,14 +46,14 @@ public class FireStationService {
      * @param address Input Address to update Station ID
      * @return return List of Firestaitons for Validation
      */
-    public int updateFireStation(FireStation updatedStation, String address)
+    public boolean updateFireStation(FireStation updatedStation, String address)
     {
-        int response = 0;
+        boolean response = false;
         //List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
         for (FireStation fs : fireStationList) {
             if (fs.getAddress().equalsIgnoreCase(address)) {
                 fs.setStation(updatedStation.getStation());
-                response = 1;
+                response = true;
                 //fs.setAddress(updatedStation.getAddress());
 
             }

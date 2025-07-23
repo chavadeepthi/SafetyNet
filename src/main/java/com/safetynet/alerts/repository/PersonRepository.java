@@ -2,9 +2,7 @@ package com.safetynet.alerts.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.JsonFileReadService;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,18 +10,18 @@ import java.util.List;
 
 @Repository
 public class PersonRepository {
-    private final JsonFileReadService jsonFileReadService;
+    private final JsonFileReadRespository jsonFileReadRespository;
     List<Person> personList;
 
-    public PersonRepository(JsonFileReadService jsonFileReadService){
-        this.jsonFileReadService = jsonFileReadService;
+    public PersonRepository(JsonFileReadRespository jsonFileReadRespository){
+        this.jsonFileReadRespository = jsonFileReadRespository;
 
     }
 
     public List<Person> processJSONPerson(){
         if (personList == null) { // only load once
-            JsonNode personNode = jsonFileReadService.getRootNode().path("persons");
-            personList = jsonFileReadService.getObjectMapper().convertValue(
+            JsonNode personNode = jsonFileReadRespository.getRootNode().path("persons");
+            personList = jsonFileReadRespository.getObjectMapper().convertValue(
                     personNode,
                     new TypeReference<List<Person>>() {}
             );
