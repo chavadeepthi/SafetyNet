@@ -1,21 +1,17 @@
 package com.safetynet.alerts.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.PersonRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import static org.apache.logging.log4j.util.StringBuilders.equalsIgnoreCase;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -100,6 +96,18 @@ public class PersonService {
 
         }
         return updated;
+    }
+
+    public List<Person> findPersonsByAddresses(List<String> addresses) {
+        List<Person> allPersons = personRepository.processJSONPerson();
+
+        return allPersons.stream()
+                .filter(person -> addresses.contains(person.getAddress()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Person> findChildByAddress(String address) {
+        return findPersonsByAddresses(Collections.singletonList(address));
     }
 
 }

@@ -1,7 +1,5 @@
 package com.safetynet.alerts.controller;
-
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.service.FireStationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

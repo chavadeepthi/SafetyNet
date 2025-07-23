@@ -1,9 +1,9 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.model.MedicalRecord;
-import com.safetynet.alerts.model.Person;
+
 import com.safetynet.alerts.repository.MedicalRecordRepository;
-import com.safetynet.alerts.repository.PersonRepository;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,5 +66,16 @@ public class MedicalRecordService {
             }
         }
         return record_deleted;
+    }
+
+    public MedicalRecord getMedicalRecordByFullName(String firstName, String lastName) {
+
+        for (MedicalRecord record : medicalRecordList) {
+            if (record.getFirstName().equalsIgnoreCase(firstName.trim()) &&
+                    record.getLastName().equalsIgnoreCase(lastName.trim())) {
+                return record;
+            }
+        }
+        return null;
     }
 }
