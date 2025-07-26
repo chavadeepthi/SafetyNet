@@ -100,10 +100,15 @@ public class PersonService {
 
     public List<Person> findPersonsByAddresses(List<String> addresses) {
         List<Person> allPersons = personRepository.processJSONPerson();
+        List<Person> matched = new ArrayList<>();
 
-        return allPersons.stream()
-                .filter(person -> addresses.contains(person.getAddress()))
-                .collect(Collectors.toList());
+        for (Person person : allPersons) {
+            if (addresses.contains(person.getAddress())) {
+                matched.add(person);
+            }
+        }
+
+        return matched;
     }
 
     public List<Person> findChildByAddress(String address) {

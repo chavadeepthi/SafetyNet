@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonAndFireStation {
+public class FirstResponderView {
     String firstName;
     String lastName;
     String address;
