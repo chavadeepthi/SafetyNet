@@ -1,6 +1,7 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.FireStationRepository;
 
 import org.junit.jupiter.api.Assertions;
@@ -103,6 +104,28 @@ public class FireStationServiceTest {
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals("123 Main St", result.get(0).getAddress());
         Assertions.assertEquals("456 Elm St", result.get(1).getAddress());
+
+    }
+    @Test
+    public void updateFireStationTest(){
+        // Arrange
+        String stationNumber = "3";
+        FireStation fs1 = new FireStation("123 Main St", "3");
+        FireStation fs2 = new FireStation("123 Main St", "9");
+
+        List<FireStation> existingFireStationList = new ArrayList<>();
+        existingFireStationList.add(fs1);
+        when(fireStationRepositoryMock.processJSONFireStation()).thenReturn(existingFireStationList);
+        fireStationServiceMock.init();
+
+        boolean result = fireStationServiceMock.updateFireStation(fs2,"123 Main St");
+        List<FireStation> stationResult = fireStationServiceMock.getAllFireStation();
+        System.out.println(stationResult);
+
+        Assertions.assertTrue(result);
+        Assertions.assertEquals("123 Main St", stationResult.get(0).getAddress());
+        Assertions.assertEquals("9", stationResult.get(0).getStation());
+
 
     }
 

@@ -44,7 +44,7 @@ public class FireStationService {
      *
      * @param updatedStation Station RequestBody
      * @param address Input Address to update Station ID
-     * @return return List of Firestaitons for Validation
+     * @return return List of Firestations for Validation
      */
     public boolean updateFireStation(FireStation updatedStation, String address)
     {

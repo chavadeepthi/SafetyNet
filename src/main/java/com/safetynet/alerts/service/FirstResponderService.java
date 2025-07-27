@@ -43,7 +43,7 @@ public class FirstResponderService {
 
     public List<String> getFireStationAddress(String stationNumber){
         List<String> stationAddressList = new ArrayList<>();
-        log.info("Station Number "+stationNumber);
+        //log.info("In Station Number "+stationNumber);
         // Avoid null pointer if data not loaded yet
         if (fireStations == null) {
             fireStations = fireStationService.getAllFireStation();
@@ -53,12 +53,16 @@ public class FirstResponderService {
                 stationAddressList.add(firestationId.getAddress());
             }
         }
-        log.info("Station Address List "+stationAddressList);
+        //log.info("Station Address List "+stationAddressList);
+        //log.info("In Station Number "+stationAddressList);
         return stationAddressList;
     }
     public AgeGroupingView getPeopleListinAddress(String stationNumber){
         List<String> stationAddressList = getFireStationAddress(stationNumber);
+        log.info("Address List "+stationAddressList);
+
         List<Person> peopleList = personService.findPersonsByAddresses(stationAddressList);
+
         List<FirstResponderView>  peopleInFireStationLimit = new ArrayList<>();
         AgeGroupingView ageGroupingList= new AgeGroupingView();
         int adultCount = 0;
@@ -94,6 +98,8 @@ public class FirstResponderService {
         ageGroupingList.setChildCount(childCount);
         ageGroupingList.setPersonList(peopleInFireStationLimit);
 
+        log.info(String.valueOf(ageGroupingList));
+
         return ageGroupingList;
 
     }
@@ -114,6 +120,7 @@ public class FirstResponderService {
 
             //paf.setStationNumber(stationNumber);
             MedicalRecord record = medicalRecordService.getMedicalRecordByFullName(person.getFirstName(), person.getLastName());
+
             if (record != null) {
                 paf.setBirthData(record.getBirthdate());
             }
@@ -126,9 +133,12 @@ public class FirstResponderService {
                 paf.setAge(age);
                 if (age < 18) {
                     hasChild= true;
-                    childList.add(paf);  }
+                    childList.add(paf);
+
+                }
             else {
                 adultList.add(paf);
+
             }
             }
 
