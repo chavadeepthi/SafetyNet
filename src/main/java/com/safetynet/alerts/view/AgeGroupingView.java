@@ -6,7 +6,8 @@ import java.util.List;
 
 @Data
 public class AgeGroupingView {
-    List<FirstResponderView> personList;
     int adultCount;
     int childCount;
+    List<FirstResponderView> personList;
+
 }

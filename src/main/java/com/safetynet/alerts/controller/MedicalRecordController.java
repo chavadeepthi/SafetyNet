@@ -36,10 +36,10 @@ public class MedicalRecordController {
         log.info("Add new Medical records");
         return medicalRecordList.addMedicalRecords(newRecord);
     }
-    @PutMapping("/medicalRecord/{firstName}/{lastName}")
+    @PutMapping("/medicalRecord")
     public ResponseEntity<String> updateMedicalRecords(@RequestBody MedicalRecord newRecord,
-                                            @PathVariable String firstName,
-                                            @PathVariable String lastName){
+                                            @RequestParam String firstName,
+                                            @RequestParam String lastName){
 
         log.info("Updating Medical record for ", firstName, lastName);
         boolean record_updated =  medicalRecordList.updateMedicalRecords(newRecord, firstName, lastName);
@@ -50,16 +50,16 @@ public class MedicalRecordController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(firstName + lastName + " not found: " );
     }
     }
-    @DeleteMapping("/medicalRecord/{firstName}/{lastName}")
+    @DeleteMapping("/medicalRecord")
     public ResponseEntity<String> deleteMedicalRecords(
-                                                 @PathVariable String firstName,
-                                                 @PathVariable String lastName){
+                                                 @RequestParam String firstName,
+                                                 @RequestParam String lastName){
 
         log.info("Deleting Medical record for ", firstName, lastName);
         boolean record_deleted =  medicalRecordList.deleteMedicalRecords( firstName, lastName);
         if(record_deleted)
         {
-            return ResponseEntity.ok("Medical Record Updation successfully.");
+            return ResponseEntity.ok("Medical Record Deletion successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(firstName + lastName + " not found: " );
         }

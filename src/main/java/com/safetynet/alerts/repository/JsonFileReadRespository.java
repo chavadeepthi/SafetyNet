@@ -32,7 +32,6 @@ public class JsonFileReadRespository {
 
         } catch (IOException e) {
             log.error("Error reading the JSON file: " + e.getMessage());
-            //System.err.println("Error reading the JSON file: " + e.getMessage());
             e.printStackTrace();
         }
 

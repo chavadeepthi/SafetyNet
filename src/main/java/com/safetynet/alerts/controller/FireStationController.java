@@ -29,9 +29,9 @@ public class FireStationController {
         return fireStationsResults;
     }
 
-    @GetMapping("/firestation/{stationNumber}")
-    public List<FireStation> getFirestationByNumber(@PathVariable String stationNumber) {
-        log.info("Searching for fire stations witn Station ID ", stationNumber);
+    @GetMapping("/firestation")
+    public List<FireStation> getFirestationByNumber(@RequestParam String stationNumber) {
+        log.info("Searching for fire stations with Station ID ", stationNumber);
         return fireStationService.findByStationNumber(stationNumber);
     }
     @PostMapping("/firestation")
@@ -42,8 +42,8 @@ public class FireStationController {
 
     // Put Fire Stations address
 
-    @PutMapping("/firestation/{address}")
-    public ResponseEntity<String> UpdateFirestationByAddress( @PathVariable String address, @RequestBody FireStation updatedStation){
+    @PutMapping("/firestation")
+    public ResponseEntity<String> UpdateFirestationByAddress( @RequestParam String address, @RequestBody FireStation updatedStation){
         log.info("Updating FireStation with Address ", address);
         boolean updated = fireStationService.updateFireStation(updatedStation, address);
 
@@ -54,11 +54,12 @@ public class FireStationController {
         }
     }
     // Delete with Station Number(grouping) and Address
-    @DeleteMapping("/firestation/{address}")
-    public ResponseEntity<String> deleteFireStation(@PathVariable String address) {
+    @DeleteMapping("/firestation")
+    public ResponseEntity<String> deleteFireStation(@RequestParam String address) {
         log.info("Deleting Firstation with Address ", address);
         boolean response =  fireStationService.deleteByAddress(address);
         if (response) {
+
             return ResponseEntity.ok("FireStation Deletion successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found: " + address);

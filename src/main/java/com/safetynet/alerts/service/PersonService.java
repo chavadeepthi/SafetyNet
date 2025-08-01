@@ -101,7 +101,7 @@ public class PersonService {
     public List<Person> findPersonsByAddresses(List<String> addresses) {
         List<Person> allPersons = personRepository.processJSONPerson();
         List<Person> matched = new ArrayList<>();
-        log.info("Address List "+addresses);
+        //log.info("Address List "+addresses);
         for (Person person : allPersons) {
             if (addresses.contains(person.getAddress())) {
                 matched.add(person);

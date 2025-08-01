@@ -41,8 +41,10 @@ public class PersonController {
     }
 
     //Put
-    @PutMapping("/person/{firstName}/{lastName}")
-    public ResponseEntity<String> updatePerson(@PathVariable String firstName, @PathVariable String lastName, @RequestBody Person updatePerson)
+    @PutMapping("/person")
+    public ResponseEntity<String> updatePerson(@RequestParam String firstName,
+                                               @RequestParam String lastName,
+                                               @RequestBody Person updatePerson)
     {
         log.info("Updating Person Details");
         boolean update_person =  personList.updatePerson(updatePerson, firstName, lastName);
@@ -56,14 +58,15 @@ public class PersonController {
     //
     // and Delete (First Name)
     // Delete with Station Number(grouping) and Address
-    @DeleteMapping("/person/{firstname}/{lastName}")
-    public ResponseEntity<String> deletePerson(@PathVariable String firstname, @PathVariable String lastName) {
-        log.info("Deleting Person with first name ", firstname, lastName);
-        boolean delete_person =  personList.deleteByFirstname(firstname, lastName);
+    @DeleteMapping("/person")
+    public ResponseEntity<String> deletePerson(@RequestParam String firstName,
+                                               @RequestParam String lastName) {
+        log.info("Deleting Person with first name ", firstName, lastName);
+        boolean delete_person =  personList.deleteByFirstname(firstName, lastName);
         if(delete_person){
-            return ResponseEntity.ok("Person Udpare successfully.");
+            return ResponseEntity.ok("Person Deleted successfully.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person details not found: " + firstname + lastName);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person details not found: " + firstName + lastName);
         }
 
 

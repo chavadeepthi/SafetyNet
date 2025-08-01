@@ -7,8 +7,10 @@ import com.safetynet.alerts.view.AgeGroupingView;
 import com.safetynet.alerts.view.FirstResponderView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,14 +27,18 @@ public class FirstResponderController {
         this.firstResponderService = firstResponderService;
     }
 
-    @GetMapping("/station/{stationNumber}")
-    public AgeGroupingView getPersonList(@PathVariable String stationNumber){
+    @GetMapping("/station")
+    public AgeGroupingView getPersonList(@RequestParam String stationNumber){
         log.info("Retrieving All Person List from given Station number");
-        return firstResponderService.getPeopleListinAddress(stationNumber);
+        AgeGroupingView result = firstResponderService.getPeopleListinAddress(stationNumber);
+        log.info("Total number of Record "+ result.getPersonList().size());
+        return result;
     }
-    @GetMapping("/childAlert/{address}")
-    public List<FirstResponderView> getChildrenList(@PathVariable String address){
+    @GetMapping("/childAlert")
+    public List<FirstResponderView> getChildrenList(@RequestParam String address){
         log.info("Retrieving All Children List");
-        return firstResponderService.getChildrenListinAddress(address);
+         List<FirstResponderView> result =  firstResponderService.getChildrenListinAddress(address);
+        log.info("Total number of Record "+ result.size());
+        return result;
     }
 }
