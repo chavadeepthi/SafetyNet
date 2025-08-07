@@ -39,7 +39,18 @@ dependencies {
 
 }
 test {
-	finalizedBy jacocoTestReport // report is always generated after tests run
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport // generate JaCoCo report after tests
+
+	testLogging {
+		events "passed", "skipped", "failed"
+		exceptionFormat "full"
+	}
+
+	reports {
+		html.required.set(true)
+		junitXml.required.set(true)
+	}
 }
 jacocoTestReport {
 	dependsOn test // tests are required to run before generating the report

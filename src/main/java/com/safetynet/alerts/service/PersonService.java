@@ -47,7 +47,7 @@ public class PersonService {
         personList.add(personObject);
         return personList;
     }
-    private Person findByFullName(String firstName, String lastName) {
+    public Person findByFullName(String firstName, String lastName) {
         for (Person p : personList) {
             if (p.getFirstName().equalsIgnoreCase(firstName) &&
                     p.getLastName().equalsIgnoreCase(lastName)) {

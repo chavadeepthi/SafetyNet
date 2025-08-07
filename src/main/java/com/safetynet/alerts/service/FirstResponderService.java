@@ -5,6 +5,7 @@ import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.FireStationRepository;
 import com.safetynet.alerts.view.AgeGroupingView;
+import com.safetynet.alerts.view.FirstResponderAddressView;
 import com.safetynet.alerts.view.FirstResponderView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,4 +153,43 @@ public class FirstResponderService {
         return childList;
 
     }
+
+    public List<FirstResponderAddressView> getPeopleMedicalHistroy(String address){
+
+        List<Person> peopleList = personService.findChildByAddress(address);
+        List<FirstResponderAddressView> peopleMedicationList= new ArrayList<>();
+        String stationNumber = fireStationService.findStationNumberbyAddress(address);
+        for (Person person : peopleList) {
+            FirstResponderAddressView paf = new FirstResponderAddressView();
+            paf.setFirstName(person.getFirstName());
+            paf.setLastName(person.getLastName());
+            paf.setAddress(person.getAddress());
+            paf.setPhoneNumber(person.getPhone());
+            paf.setStationNumber(stationNumber);
+
+            //paf.setStationNumber(stationNumber);
+            MedicalRecord record = medicalRecordService.getMedicalRecordByFullName(person.getFirstName(), person.getLastName());
+
+            if (record != null) {
+                paf.setBirthData(record.getBirthdate());
+                paf.setAllergyList(record.getAllergies());
+                paf.setMedicationList(record.getMedications());
+            }
+            String birthDateString = paf.getBirthData();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            if (birthDateString != null && !birthDateString.isEmpty()) {
+                LocalDate birthDate = LocalDate.parse(birthDateString, formatter);
+                LocalDate currentDate = LocalDate.now();
+                int age = Period.between(birthDate, currentDate).getYears();
+                paf.setAge(age);
+            }
+            peopleMedicationList.add(paf);
+        }
+
+        return peopleMedicationList;
+
+
+    }
+
+
 }

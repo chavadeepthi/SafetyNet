@@ -64,5 +64,17 @@ public class FireStationRepository {
 
     }
 
+    public String findStationByAddress(String StationAddress){
+        if (fireStations == null) {
+            processJSONFireStation();
+        }
+        for (FireStation firestationId : fireStations) {
+            if (firestationId.getAddress().trim().equalsIgnoreCase(StationAddress.trim())) {
+                return firestationId.getStation();
+            }
+        }
+        return null;
+    }
+
 
 }

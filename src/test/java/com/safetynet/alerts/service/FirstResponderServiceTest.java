@@ -4,6 +4,7 @@ import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.view.AgeGroupingView;
+import com.safetynet.alerts.view.FirstResponderAddressView;
 import com.safetynet.alerts.view.FirstResponderView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -139,5 +140,44 @@ public class FirstResponderServiceTest {
         assertEquals("Jane", second.getFirstName());
         assertTrue(second.getAge() <= 18);
 
+    }
+    @Test
+    void getPeopleMedicalHistroyTest(){
+        // Arrange
+        String add1 = "1509 Culver St";
+
+        //List<FirstResponderAddressView> peopleMedicationList= new ArrayList<>();
+        String stationNumber = "3";
+        Person p1 =    new Person( "John", "Boyd", "1509 Culver St", "Culver",
+                "97451", "841-874-6741", "clivfd@ymail.com" );
+        Person p2 = new Person( "Jane", "Smith", "834 Binoc Ave", "Culver",
+                "97451", "841-874-7458", "gramps@email.com" );
+        List<Person> personMockData = Arrays.asList(p1,p2);
+
+        MedicalRecord adultRecord = new MedicalRecord(
+                "John", "Boyd", "03/06/1984",
+                List.of("aznol:350mg", "hydrapermazol:100mg"),
+                List.of("nillacilan")
+        );
+        MedicalRecord childRecord = new MedicalRecord(
+                "Jane", "Smith", "03/06/2015",
+                List.of("aznol:350mg", "hydrapermazol:100mg"),
+                List.of("nillacilan")
+        );
+
+        when(medicalRecordServiceMock.getMedicalRecordByFullName("John", "Boyd")).thenReturn(adultRecord);
+        when(medicalRecordServiceMock.getMedicalRecordByFullName("Jane", "Smith")).thenReturn(childRecord);
+
+
+        when(personServiceMock.findChildByAddress(add1)).thenReturn(personMockData);
+        when(fireStationServiceMock.findStationNumberbyAddress(add1)).thenReturn(stationNumber);
+
+        List<FirstResponderAddressView> result = firstResponderServiceMock.getPeopleMedicalHistroy(add1);
+
+        //System.out.println(result);
+
+        assertEquals(2, result.size());
+        assertEquals("Jane", result.get(1).getFirstName());
+        assertEquals("John", result.get(0).getFirstName());
     }
 }

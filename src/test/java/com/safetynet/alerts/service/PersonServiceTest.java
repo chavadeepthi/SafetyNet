@@ -99,4 +99,108 @@ class PersonServiceTest {
         assertEquals("cutie@new.com", result.get(0).getEmail());
 
     }
+    @Test
+    void findPersonsByAddressesTest(){
+        //Arrange
+        Person p1 =    new Person( "Clive", "Ferguson", "748 Townings Dr", "Culver",
+                "97451", "841-874-6741", "clivfd@ymail.com" );
+        Person p2 = new Person( "Eric", "Cadigan", "951 LoneTree Rd", "Culver",
+                "97451", "841-874-7458", "gramps@email.com" );
+
+        String address1 = "951 LoneTree Rd";
+        String address2 = "748 Townings Dr";
+        //Act
+        List<Person> mockData =  Arrays.asList(p1, p2);
+        List<String> mockAddress = Arrays.asList(address1,address2);
+        when(personRepositoryMock.processJSONPerson()).thenReturn(mockData);
+        personServiceMock.init();
+        List<Person> result = personServiceMock.findPersonsByAddresses(mockAddress);
+        System.out.println(result);
+
+        // Assert
+        Assertions.assertEquals(result.size() , 2);
+        assertEquals("748 Townings Dr", result.get(0).getAddress());
+        assertEquals("951 LoneTree Rd", result.get(1).getAddress());
+    }
+
+    @Test
+    void deletePersonSuccessTest() {
+        // Arrange: initial data
+        Person original = new Person("Cutie", "Doe", "123 Main St", "CityA", "12345", "111-111-1111", "cutie@old.com");
+        //Person newRecord = new Person("Master", "Richie", "456 New St", "CityB", "54321", "222-222-2222", "cutie@new.com");
+        String firstName = "Cutie";
+        String lastname = "Doe";
+        List<Person> testList = new ArrayList<>();
+        testList.add(original);
+        when(personRepositoryMock.processJSONPerson()).thenReturn(testList);
+        personServiceMock.init();
+
+        boolean result = personServiceMock.deleteByFirstname(firstName,lastname);
+        // Assert
+        Assertions.assertEquals(result , true);
+
+
+    }
+    @Test
+    void deletePersonFailTest() {
+        // Arrange: initial data
+        Person original = new Person("Cutie", "Doe", "123 Main St", "CityA", "12345", "111-111-1111", "cutie@old.com");
+        //Person newRecord = new Person("Master", "Richie", "456 New St", "CityB", "54321", "222-222-2222", "cutie@new.com");
+        String firstName = "Master";
+        String lastname = "Richie";
+        List<Person> testList = new ArrayList<>();
+        testList.add(original);
+        when(personRepositoryMock.processJSONPerson()).thenReturn(testList);
+        personServiceMock.init();
+
+        boolean result = personServiceMock.deleteByFirstname(firstName,lastname);
+        // Assert
+        Assertions.assertEquals(result , false);
+
+
+    }
+    @Test
+    void findByFullNameSuccessTest() {
+        // Arrange: initial data
+        Person original = new Person("Cutie", "Doe", "123 Main St", "CityA", "12345", "111-111-1111", "cutie@old.com");
+        Person newRecord = new Person("Master", "Richie", "456 New St", "CityB", "54321", "222-222-2222", "cutie@new.com");
+        String firstName = "Master";
+        String lastname = "Richie";
+        //List<Person> mockData =  Arrays.asList(p1, p2);
+        List<Person> testList = Arrays.asList(original, newRecord);
+        //testList.add(original);
+        when(personRepositoryMock.processJSONPerson()).thenReturn(testList);
+        personServiceMock.init();
+
+        Person result = personServiceMock.findByFullName(firstName,lastname);
+        // Assert
+        //System.out.println(result);
+// Assert
+
+        assertEquals("456 New St", result.getAddress());
+        assertEquals("Master", result.getFirstName());
+
+    }
+    @Test
+    void findByFullNameFailTest() {
+        // Arrange: initial data
+        Person original = new Person("Cutie", "Doe", "123 Main St", "CityA", "12345", "111-111-1111", "cutie@old.com");
+        Person newRecord = new Person("Master", "Richie", "456 New St", "CityB", "54321", "222-222-2222", "cutie@new.com");
+        String firstName = "Mister";
+        String lastname = "Master";
+        //List<Person> mockData =  Arrays.asList(p1, p2);
+        List<Person> testList = Arrays.asList(original, newRecord);
+        //testList.add(original);
+        when(personRepositoryMock.processJSONPerson()).thenReturn(testList);
+        personServiceMock.init();
+
+        Person result = personServiceMock.findByFullName(firstName,lastname);
+        // Assert
+        //System.out.println(result);
+// Assert
+
+        assertEquals(result, null);
+        //assertEquals("Master", result.getFirstName());
+
+    }
 }

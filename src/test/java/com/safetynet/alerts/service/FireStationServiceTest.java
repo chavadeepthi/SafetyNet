@@ -129,5 +129,27 @@ public class FireStationServiceTest {
 
     }
 
+    @Test
+    public void FindByStationNumber_ReturnsMatchingAddress() {
+        // Arrange
+        String stationNumber = "3";
+        String stationAddress = "456 Delaware";
+        //FireStation fs1 = new FireStation("123 Main St", "3");
+        FireStation fs2 = new FireStation("456 Delaware", "3");
+        FireStation fs3 = new FireStation("456 Delaware", "9");
+
+
+        List<FireStation> expectedList = List.of(fs2,fs3);
+
+        when(fireStationRepositoryMock.findStationByAddress(stationAddress)).thenReturn(stationNumber);
+        fireStationServiceMock.init();
+
+        // Act
+        String result = fireStationServiceMock.findStationNumberbyAddress(stationAddress);
+        System.out.println(result);
+        // Assert
+        Assertions.assertEquals("3", result);
+  }
+
 
 }
