@@ -3,12 +3,14 @@ package com.safetynet.alerts.repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.safetynet.alerts.model.Person;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class PersonRepository {
     private final JsonFileReadRespository jsonFileReadRespository;
     List<Person> personList;
@@ -44,8 +46,9 @@ public class PersonRepository {
         return emails;
     }
     public Person findByFullName(String firstName, String lastName) {
-
-        for (Person person : processJSONPerson()) {
+        if(personList==null)
+            processJSONPerson();
+        for (Person person : personList) {
             if (person.getFirstName().equalsIgnoreCase(firstName.trim()) &&
                     person.getLastName().equalsIgnoreCase(lastName.trim())) {
                 return person;
@@ -53,6 +56,25 @@ public class PersonRepository {
         }
         return null;
     }
+
+    public List<Person> findAddressByLastName(String lastName) {
+        if (personList == null) {
+            processJSONPerson();
+        }
+
+        List<Person> personByLastNameList = new ArrayList<>();
+        //String trimmedLastName = lastName.replaceAll("^\"|\"$", "");
+
+        for (Person person : personList) {
+
+            if (person.getLastName().trim().equalsIgnoreCase(lastName.trim())) {
+                personByLastNameList.add(person);
+            }
+        }
+
+       return personByLastNameList;
+    }
+
 
 
 

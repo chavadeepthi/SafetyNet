@@ -115,4 +115,11 @@ public class PersonService {
         return findPersonsByAddresses(Collections.singletonList(address));
     }
 
+    public List<Person> findAddressByLastName(String lastName) {
+
+        List<Person> result =  personRepository.findAddressByLastName(lastName);
+
+        return result;
+    }
+
 }

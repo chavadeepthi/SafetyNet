@@ -76,5 +76,22 @@ public class FireStationRepository {
         return null;
     }
 
+    public List<String> findStationAddressbyNumberList (List<String> stationNumbers) {
+        if (fireStations == null) {
+            processJSONFireStation();
+        }
+
+        List<String> addresses = new ArrayList<>();
+        for (String number : stationNumbers) {
+            for (FireStation fs : fireStations) {
+                if (fs.getStation().trim().equalsIgnoreCase(number.trim())) {
+                    addresses.add(fs.getAddress());
+
+                }
+            }
+        }
+        return addresses;
+    }
+
 
 }

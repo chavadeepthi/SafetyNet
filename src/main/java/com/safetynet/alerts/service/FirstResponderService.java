@@ -29,10 +29,10 @@ public class FirstResponderService {
     private FireStationService fireStationService;
     private PersonService personService;
     private MedicalRecordService medicalRecordService;
-
+    //Autowired helps with Automatic dependency injections and Container
+    //Service helps for business logic
     @Autowired
     public FirstResponderService(
-
             FireStationService fireStationService,
             PersonService personService,
             MedicalRecordService medicalRecordService){
@@ -191,5 +191,58 @@ public class FirstResponderService {
 
     }
 
+    public List<FirstResponderAddressView> getPersonInfoWithLastName(String lastName){
+
+        List<Person> peopleList = personService.findAddressByLastName(lastName);
+        List<FirstResponderAddressView> peopleMedicationList= new ArrayList<>();
+        //String stationNumber = fireStationService.findStationNumberbyAddress(address);
+        for (Person person : peopleList) {
+            FirstResponderAddressView paf = new FirstResponderAddressView();
+            paf.setFirstName(person.getFirstName());
+            paf.setLastName(person.getLastName());
+            paf.setAddress(person.getAddress());
+            paf.setPhoneNumber(person.getPhone());
+            paf.setStationNumber(fireStationService.findStationNumberbyAddress(person.getAddress()));
+
+            //paf.setStationNumber(stationNumber);
+            MedicalRecord record = medicalRecordService.getMedicalRecordByFullName(person.getFirstName(), person.getLastName());
+
+            if (record != null) {
+                paf.setBirthData(record.getBirthdate());
+                paf.setAllergyList(record.getAllergies());
+                paf.setMedicationList(record.getMedications());
+            }
+            String birthDateString = paf.getBirthData();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            if (birthDateString != null && !birthDateString.isEmpty()) {
+                LocalDate birthDate = LocalDate.parse(birthDateString, formatter);
+                LocalDate currentDate = LocalDate.now();
+                int age = Period.between(birthDate, currentDate).getYears();
+                paf.setAge(age);
+            }
+            peopleMedicationList.add(paf);
+        }
+
+        return peopleMedicationList;
+
+
+    }
+/** http://localhost:8080/flood/stations?stations=<a list of
+ station_numbers>
+ This URL must return a list of all households served by the fire station. This list must
+ group people by address. It must also include the name, phone number, and age of
+ the residents and display their medical history (medications, dosages, and allergies)
+ alongside each name. **/
+
+    public List<FirstResponderAddressView> getFloodApiDetails(List<String> stationNumbers) {
+        List<String> stationAddresses = fireStationService.findStationAddressbyNumberList(stationNumbers);
+        List<FirstResponderAddressView> floodAlertList= new ArrayList<>();
+
+        for(String stationAddress : stationAddresses){
+            List<FirstResponderAddressView> peopleList = getPeopleMedicalHistroy(stationAddress);
+            floodAlertList.addAll(peopleList);
+        }
+        return floodAlertList;
+    }
 
 }

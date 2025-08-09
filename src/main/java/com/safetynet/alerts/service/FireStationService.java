@@ -41,6 +41,10 @@ public class FireStationService {
 
 
     }
+    public List<String> findStationAddressbyNumberList (List<String> stationNumbers)
+    {
+            return fireStationRepository.findStationAddressbyNumberList(stationNumbers);
+    }
     public List<FireStation> addNewFireStation(FireStation fireStationObject){
         fireStationList.add(fireStationObject);
         return fireStationList;
