@@ -12,7 +12,7 @@ public class FireStationService {
 
 
     private FireStationRepository fireStationRepository;
-    private List<FireStation> fireStationList = new ArrayList<>();
+    public List<FireStation> fireStationList = new ArrayList<>();
 
     public FireStationService(FireStationRepository fireStationRepository) {
         this.fireStationRepository = fireStationRepository;

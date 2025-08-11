@@ -87,4 +87,25 @@ public class FireStationRepositoryTest {
         assertNotNull(station);
         assertEquals("1509 Culver St", station.getAddress());
     }
+
+    @Test
+    void findStationAddressbyNumberListTest() throws Exception{
+        setupMockJsonData();
+        fireStationRepositoryMock.processJSONFireStation();
+
+        List<String> result = fireStationRepositoryMock.findStationAddressbyNumberList(List.of("1","3"));
+        assertNotNull(result);
+
+    }
+
+    @Test
+    void findStationByAddressTest() throws Exception{
+        setupMockJsonData();
+        fireStationRepositoryMock.processJSONFireStation();
+
+        String result = fireStationRepositoryMock.findStationByAddress("1509 Culver St");
+        assertNotNull(result);
+        assertEquals("3", result);
+
+    }
 }

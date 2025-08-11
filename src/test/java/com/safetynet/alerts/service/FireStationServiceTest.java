@@ -151,5 +151,26 @@ public class FireStationServiceTest {
         Assertions.assertEquals("3", result);
   }
 
+    @Test
+    public void deleteStaionByAddressTest() {
+        // Arrange
+        String stationNumber = "3";
+        String stationAddress = "456 Delaware";
+        fireStationServiceMock.fireStationList = new ArrayList<>();
+
+        fireStationServiceMock.fireStationList = new ArrayList<>();
+        fireStationServiceMock.fireStationList.add(new FireStation("123 Main St", "3"));
+        fireStationServiceMock.fireStationList.add(new FireStation("456 Delaware", "3"));
+
+        //List<FireStation> fireStationList = Arrays.asList(fs1, fs2);
+        //fireStationServiceMock.init();
+
+        // Act
+        boolean result = fireStationServiceMock.deleteByAddress(stationAddress);
+        System.out.println(result);
+        // Assert
+        Assertions.assertEquals(true, result);
+    }
+
 
 }
