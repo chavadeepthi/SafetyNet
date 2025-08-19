@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 @Slf4j
 @Service
@@ -32,6 +33,7 @@ public class JsonFileReadRespository {
 
         } catch (IOException e) {
             log.error("Error reading the JSON file: " + e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
         }
 

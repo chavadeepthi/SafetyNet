@@ -3,7 +3,7 @@ package com.safetynet.alerts.service;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.repository.FireStationRepository;
+
 import com.safetynet.alerts.view.AgeGroupingView;
 import com.safetynet.alerts.view.FirstResponderAddressView;
 import com.safetynet.alerts.view.FirstResponderView;
@@ -20,11 +20,10 @@ import java.util.List;
 @Slf4j
 @Service
 public class FirstResponderService {
-    private FirstResponderView firstResponderView;
-    private Person person;
+
+
     private List<FireStation> fireStations;
-    private MedicalRecord medicalRecord;
-    //private AgeGroupingView ageGroupingView;
+
 
     private FireStationService fireStationService;
     private PersonService personService;
@@ -60,7 +59,7 @@ public class FirstResponderService {
     }
     public AgeGroupingView getPeopleListinAddress(String stationNumber){
         List<String> stationAddressList = getFireStationAddress(stationNumber);
-        log.info("Address List "+stationAddressList);
+        //log.info("Address List "+stationAddressList);
 
         List<Person> peopleList = personService.findPersonsByAddresses(stationAddressList);
 
@@ -99,7 +98,7 @@ public class FirstResponderService {
         ageGroupingList.setChildCount(childCount);
         ageGroupingList.setPersonList(peopleInFireStationLimit);
 
-        log.info(String.valueOf(ageGroupingList));
+        //log.info(String.valueOf(ageGroupingList));
 
         return ageGroupingList;
 
@@ -158,14 +157,14 @@ public class FirstResponderService {
 
         List<Person> peopleList = personService.findChildByAddress(address);
         List<FirstResponderAddressView> peopleMedicationList= new ArrayList<>();
-        String stationNumber = fireStationService.findStationNumberbyAddress(address);
+        //String stationNumber = fireStationService.findStationNumberbyAddress(address);
         for (Person person : peopleList) {
             FirstResponderAddressView paf = new FirstResponderAddressView();
             paf.setFirstName(person.getFirstName());
             paf.setLastName(person.getLastName());
             paf.setAddress(person.getAddress());
             paf.setPhoneNumber(person.getPhone());
-            paf.setStationNumber(stationNumber);
+            //paf.setStationNumber(stationNumber);
 
             //paf.setStationNumber(stationNumber);
             MedicalRecord record = medicalRecordService.getMedicalRecordByFullName(person.getFirstName(), person.getLastName());
@@ -202,7 +201,7 @@ public class FirstResponderService {
             paf.setLastName(person.getLastName());
             paf.setAddress(person.getAddress());
             paf.setPhoneNumber(person.getPhone());
-            paf.setStationNumber(fireStationService.findStationNumberbyAddress(person.getAddress()));
+            //paf.setStationNumber(fireStationService.findStationNumberbyAddress(person.getAddress()));
 
             //paf.setStationNumber(stationNumber);
             MedicalRecord record = medicalRecordService.getMedicalRecordByFullName(person.getFirstName(), person.getLastName());
