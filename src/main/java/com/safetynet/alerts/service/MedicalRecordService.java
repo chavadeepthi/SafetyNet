@@ -33,6 +33,7 @@ public class MedicalRecordService {
 
     public List<MedicalRecord> addMedicalRecords(MedicalRecord newRecord) {
         medicalRecordList.addLast(newRecord);
+        medicalRecordRepository.writeMedicalRecordtoJSON(medicalRecordList);
         return  medicalRecordList;
     }
 
@@ -51,6 +52,7 @@ public class MedicalRecordService {
                 break;
             }
         }
+        medicalRecordRepository.writeMedicalRecordtoJSON(medicalRecordList);
         return record_deleted;
     }
 
@@ -65,6 +67,7 @@ public class MedicalRecordService {
                 record_deleted = true;
             }
         }
+        medicalRecordRepository.writeMedicalRecordtoJSON(medicalRecordList);
         return record_deleted;
     }
 

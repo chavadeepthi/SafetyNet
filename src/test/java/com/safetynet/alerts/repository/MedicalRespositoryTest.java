@@ -2,9 +2,11 @@ package com.safetynet.alerts.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.MedicalRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -12,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MedicalRespositoryTest {
     @Mock
@@ -21,12 +23,14 @@ public class MedicalRespositoryTest {
     @InjectMocks
     MedicalRecordRepository medicalRecordRepositoryMock;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    public ObjectMapper objectMapper = new ObjectMapper();
 
 
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
+        objectMapper = new ObjectMapper();
+        medicalRecordRepositoryMock = new MedicalRecordRepository(jsonFileReadRespositoryMock, objectMapper);
     }
     private void setupMockJsonData() throws Exception {
         String json = """
@@ -59,5 +63,43 @@ public class MedicalRespositoryTest {
         assertEquals(2, result.get(0).getMedications().size());
 
 
+    }
+    @Test
+    void writeMedicalRecordtoJSON_Success() throws Exception {
+        // Arrange
+        setupMockJsonData();
+
+        List<MedicalRecord> updatedList = List.of(
+                new MedicalRecord(
+                        "Smart",
+                        "Pants",
+                        "03/06/1984",
+                        List.of("aznol:350mg", "hydrapermazol:100mg"),
+                        List.of("nillacilan")
+                ),
+        new MedicalRecord(
+                "John",
+                "Boyd",
+                "03/06/1984",
+                List.of("aznol:350mg", "hydrapermazol:100mg"),
+                List.of("nillacilan"))
+        );// new one
+
+
+        // We want to capture what gets passed to writeToJsonFile
+        ArgumentCaptor<JsonNode> captor = ArgumentCaptor.forClass(JsonNode.class);
+
+        // Act
+        medicalRecordRepositoryMock.writeMedicalRecordtoJSON(updatedList);
+
+        // Assert
+        verify(jsonFileReadRespositoryMock, times(1)).writeToJsonFile(captor.capture());
+
+        JsonNode writtenRoot = captor.getValue();
+
+        // The root should contain 2 firestations now
+        assertEquals(2, writtenRoot.get("medicalrecords").size());
+        assertEquals("Pants", writtenRoot.get("medicalrecords").get(0).get("lastName").asText());
+        assertEquals("Boyd", writtenRoot.get("medicalrecords").get(1).get("lastName").asText());
     }
 }

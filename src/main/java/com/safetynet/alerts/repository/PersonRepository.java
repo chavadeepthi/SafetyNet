@@ -2,6 +2,9 @@ package com.safetynet.alerts.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.safetynet.alerts.model.Person;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -14,9 +17,11 @@ import java.util.List;
 public class PersonRepository {
     private final JsonFileReadRespository jsonFileReadRespository;
     List<Person> personList;
+    ObjectMapper objectMapper;
 
-    public PersonRepository(JsonFileReadRespository jsonFileReadRespository){
+    public PersonRepository(JsonFileReadRespository jsonFileReadRespository, ObjectMapper objectMapper){
         this.jsonFileReadRespository = jsonFileReadRespository;
+        this.objectMapper = objectMapper;
 
     }
 
@@ -74,8 +79,27 @@ public class PersonRepository {
 
        return personByLastNameList;
     }
+    public void writePersontoJSON(List<Person> peopleList) {
+
+        try {
+            // Convert updated Medical Record list back into a JsonNode
+            ObjectNode root = (ObjectNode) jsonFileReadRespository.getRootNode();  // root of data.json
+            ArrayNode peopleListNode = objectMapper.valueToTree(peopleList);
+
+            // Replace the Medical Record array in the root
+            root.set("persons", peopleListNode);
+
+            // Reuse your existing method
+            jsonFileReadRespository.writeToJsonFile(root);
+
+        } catch (Exception e) {
+            log.error("Error persisting Person List updates: {}", e.getMessage(), e);
+            throw new RuntimeException("Error persisting Person updates", e);
+        }
+    }
 
 
 
 
-}
+
+    }

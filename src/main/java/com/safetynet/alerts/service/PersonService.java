@@ -1,5 +1,8 @@
 package com.safetynet.alerts.service;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.PersonRepository;
 import jakarta.annotation.PostConstruct;
@@ -45,6 +48,7 @@ public class PersonService {
         //List<Person> personList = getAllPerson();
         //Person existingPerson = personRepository.findByFullName(personObject.getFirstName(), personObject.getLastName());
         personList.add(personObject);
+        personRepository.writePersontoJSON(personList);
         return personList;
     }
     public Person findByFullName(String firstName, String lastName) {
@@ -70,7 +74,7 @@ public class PersonService {
                 break;
             }
         }
-
+        personRepository.writePersontoJSON(personList);
         // Optionally persist the updated list here if needed
         return removed;
     }
@@ -95,6 +99,7 @@ public class PersonService {
             }
 
         }
+        personRepository.writePersontoJSON(personList);
         return updated;
     }
 
@@ -121,5 +126,6 @@ public class PersonService {
 
         return result;
     }
+
 
 }

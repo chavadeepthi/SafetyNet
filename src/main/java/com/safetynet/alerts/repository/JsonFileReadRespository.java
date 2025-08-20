@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -46,5 +47,26 @@ public class JsonFileReadRespository {
 
     public ObjectMapper getObjectMapper() {
         return objectMapper;
+    }
+
+    /**
+     * Write back to the JSON file
+     * @param updatedNode new JsonNode to persist
+     */
+    public void writeToJsonFile(JsonNode updatedNode) {
+        File jsonFile = new File("src/main/resources/data.json");
+        try {
+            if (jsonFile == null) {
+                log.error("JSON file reference is null, cannot write back!");
+                return;
+            }
+
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(jsonFile, updatedNode);
+            this.rootNode = updatedNode; // update local reference too
+            log.info("Successfully wrote updates to {}", jsonFile.getAbsolutePath());
+
+        } catch (IOException e) {
+            log.error("Error writing to JSON file: {}", e.getMessage(), e);
+        }
     }
 }

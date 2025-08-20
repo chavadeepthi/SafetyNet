@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.model.FireStation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -13,21 +14,24 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class FireStationRepositoryTest {
     @Mock
     private JsonFileReadRespository jsonFileReadRepositoryMock;
 
     @InjectMocks
-    private FireStationRepository fireStationRepositoryMock;
+    public FireStationRepository fireStationRepositoryMock;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    public ObjectMapper objectMapper = new ObjectMapper();
 
 
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
+        objectMapper = new ObjectMapper();
+        fireStationRepositoryMock = new FireStationRepository(jsonFileReadRepositoryMock, objectMapper);
+
     }
 
     private void setupMockJsonData() throws Exception {
@@ -108,4 +112,32 @@ public class FireStationRepositoryTest {
         assertEquals("3", result);
 
     }
+    @Test
+    void writeFireStationtoJSON_Success() throws Exception {
+        // Arrange
+        setupMockJsonData();
+
+        // Create a new FireStation list with 2 entries
+        List<FireStation> updatedList = List.of(
+                new FireStation("1509 Culver St", "3"), // existing one
+                new FireStation("29 15th St", "2")      // new one
+        );
+
+        // We want to capture what gets passed to writeToJsonFile
+        ArgumentCaptor<JsonNode> captor = ArgumentCaptor.forClass(JsonNode.class);
+
+        // Act
+        fireStationRepositoryMock.writeFireStationtoJSON(updatedList);
+
+        // Assert
+        verify(jsonFileReadRepositoryMock, times(1)).writeToJsonFile(captor.capture());
+
+        JsonNode writtenRoot = captor.getValue();
+
+        // The root should contain 2 firestations now
+        assertEquals(2, writtenRoot.get("firestations").size());
+        assertEquals("1509 Culver St", writtenRoot.get("firestations").get(0).get("address").asText());
+        assertEquals("29 15th St", writtenRoot.get("firestations").get(1).get("address").asText());
+    }
+
 }

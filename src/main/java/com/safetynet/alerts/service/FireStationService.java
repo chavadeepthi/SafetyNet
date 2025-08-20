@@ -1,4 +1,6 @@
 package com.safetynet.alerts.service;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.repository.FireStationRepository;
 import jakarta.annotation.PostConstruct;
@@ -47,6 +49,7 @@ public class FireStationService {
     }
     public List<FireStation> addNewFireStation(FireStation fireStationObject){
         fireStationList.add(fireStationObject);
+        fireStationRepository.writeFireStationtoJSON(fireStationList);
         return fireStationList;
     }
 
@@ -59,18 +62,23 @@ public class FireStationService {
      */
     public boolean updateFireStation(FireStation updatedStation, String address)
     {
-        boolean response = false;
-        //List<FireStation> fireStationList = fireStationRepository.processJSONFireStation();
+
+        boolean found = false;
+
         for (FireStation fs : fireStationList) {
             if (fs.getAddress().equalsIgnoreCase(address)) {
                 fs.setStation(updatedStation.getStation());
-                response = true;
-                //fs.setAddress(updatedStation.getAddress());
+                found = true;
 
+                break;
             }
+
         }
-        return response;
+        fireStationRepository.writeFireStationtoJSON(fireStationList);
+
+        return found;
     }
+
     public boolean deleteByAddress(String address) {
 
         Iterator<FireStation> iterator = fireStationList.iterator();
@@ -84,8 +92,8 @@ public class FireStationService {
                 break;
             }
         }
+        fireStationRepository.writeFireStationtoJSON(fireStationList);
 
-        // Optionally persist the updated list here if needed
         return removed;
     }
 }

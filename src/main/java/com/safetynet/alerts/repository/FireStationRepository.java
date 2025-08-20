@@ -2,12 +2,18 @@ package com.safetynet.alerts.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.safetynet.alerts.model.FireStation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class FireStationRepository {
 
@@ -15,11 +21,13 @@ public class FireStationRepository {
 
 
     private final JsonFileReadRespository jsonFileReadRespository;
+    private final ObjectMapper objectMapper;
     List<FireStation> fireStations;
 
 
-    public FireStationRepository(JsonFileReadRespository jsonFileReadRespository){
+    public FireStationRepository(JsonFileReadRespository jsonFileReadRespository, ObjectMapper objectMapper){
         this.jsonFileReadRespository = jsonFileReadRespository;
+        this.objectMapper = objectMapper;
     }
 
     public List<FireStation> processJSONFireStation() {
@@ -92,6 +100,28 @@ public class FireStationRepository {
         }
         return addresses;
     }
+
+    public void writeFireStationtoJSON(List<FireStation> fireStationList) {
+
+        try {
+            // Convert updated fireStations list back into a JsonNode
+            ObjectNode root = (ObjectNode) jsonFileReadRespository.getRootNode();  // root of data.json
+            ArrayNode firestationsNode = objectMapper.valueToTree(fireStationList);
+
+            // Replace the firestations array in the root
+            root.set("firestations", firestationsNode);
+
+            // Reuse your existing method
+            jsonFileReadRespository.writeToJsonFile(root);
+
+        } catch (Exception e) {
+            log.error("Error persisting FireStation updates: {}", e.getMessage(), e);
+            throw new RuntimeException("Error persisting FireStation updates", e);
+        }
+
+    }
+
+
 
 
 }
